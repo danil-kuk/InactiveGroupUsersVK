@@ -6,7 +6,7 @@
 h2 {
   font-size: 2.4rem;
   text-align: center;
-  margin-bottom: 0.2rem;
+  margin: 0.2rem 0;
 }
 
 p {
@@ -18,8 +18,7 @@ p {
 a {
   color: #222;
   text-decoration: none;
-  margin: 0 0.4rem;
-  padding: 0.2rem;
+  cursor: pointer;
 }
 
 progress {
@@ -62,12 +61,32 @@ a:active {
   margin: 0;
 }
 
+.app__token {
+  font-size: 1.6rem;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.app__token a {
+  text-decoration: underline;
+}
+
+.app__token input {
+  width: 100%;
+  box-sizing : border-box;
+}
+
 .app__list li {
   display: flex;
   height: 3rem;
   align-items: center;
   justify-content: flex-end;
   font-size: 1.6rem;
+}
+
+.app__list li a {
+  margin: 0 0.4rem;
+  padding: 0.2rem;
 }
 
 .app__list button {

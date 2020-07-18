@@ -12,7 +12,8 @@ export default class App extends Component {
     groupId: 0,
     progressMax: 1,
     offset: 0,
-    isSearching: false
+    isSearching: false,
+    accessToken: null
   };
 
   componentDidMount() {
@@ -47,11 +48,24 @@ export default class App extends Component {
     })
   };
 
-  deleteUser = (userId) => {
-    console.log('Delete', userId)
+  redirectToVKAuth = () => {
+    vk.getAppAccessToken()
+  };
+
+  setAccessToken = (event) => {
+    const token = event.target.value
     this.setState({
-      users: this.state.users.filter((user) => user.id !== userId)
+      accessToken: token.trim()
     })
+  };
+
+  deleteUser = async(userId) => {
+    const response = await vk.deleteUserFromGroup(this.state.groupId, userId, this.state.accessToken)
+    if (response) {
+      this.setState({
+        users: this.state.users.filter((user) => user.id !== userId)
+      })
+    }
   };
 
   render() {
@@ -67,10 +81,18 @@ export default class App extends Component {
               Начать поиск
             </button>
           )}
+          <div className="app__token">
+            <label>
+              <span>
+                Введите <a onClick={this.redirectToVKAuth}>ключ</a>:{' '}
+              </span>
+              <input type="text" onChange={this.setAccessToken}></input>
+            </label>
+          </div>
           <h2>Список пользователей:</h2>
           <progress className="app__progress" value={this.state.offset} max={this.state.progressMax}></progress>
           <span className="app__count">Количество: {this.state.users.length}</span>
-          <List users={this.state.users} onUserDelete={this.deleteUser} />
+          <List users={this.state.users} onUserDelete={this.deleteUser} showDeleteButton={this.state.accessToken} />
         </div>
       )
     }

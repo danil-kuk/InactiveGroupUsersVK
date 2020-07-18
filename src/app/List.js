@@ -7,7 +7,9 @@ export default class List extends Component {
         {this.props.users.map((user) => (
           <li key={user.id}>
             <a href={`https://vk.com/id${user.id}`} target='_blank'>{user.first_name} {user.last_name}</a>
+            {this.props.showDeleteButton &&
             <button onClick={() => this.props.onUserDelete(user.id)}>✖</button>
+            }
           </li>
         ))}
       </ul>
