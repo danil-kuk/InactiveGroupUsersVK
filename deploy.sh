@@ -14,10 +14,6 @@ echo Building. This may take a minute...
 export PUBLIC_URL="/${repo}/"
 npm run build -- --public-url $PUBLIC_URL
 
-# copy additional files into the build output directory
-echo Copying additional files...
-cp src/assets/404.html dist
-
 # navigate into the build output directory
 cd dist
 
