@@ -1,0 +1,100 @@
+:root {
+  font-family: Helvetica, sans-serif;
+  font-size: 10px;
+}
+
+h2 {
+  font-size: 2.4rem;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+
+p {
+  font-size: 1.8rem;
+  margin: 0;
+  text-align: center;
+}
+
+a {
+  color: #222;
+  text-decoration: none;
+  margin: 0 0.4rem;
+  padding: 0.2rem;
+}
+
+progress {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+a:hover {
+  color: #4a76a8;
+}
+
+a:active {
+  color: #214d80;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  margin: auto;
+  width: 90%;
+  height: 95vh;
+}
+
+.app__start-button {
+  width: 100%;
+  height: 4rem;
+  font-size: 1.8rem;
+}
+
+.app__list {
+  display: block;
+  height: 50%;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: scroll;
+  margin: 0;
+}
+
+.app__list li {
+  display: flex;
+  height: 3rem;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.6rem;
+}
+
+.app__list button {
+  color: #555;
+  border: 0;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 2rem;
+  height: 100%;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  line-height: 2rem;
+  text-align: center;
+  margin-right: 1rem;
+}
+
+.app__list button:hover {
+  color: #000;
+}
+
+.app__list button:active {
+  color: #ff0000;
+}
+
+@media screen and (min-width: 1024px) {
+  .app {
+    width: 40%;
+  }
+}
