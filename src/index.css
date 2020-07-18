@@ -93,6 +93,12 @@ a:active {
   color: #ff0000;
 }
 
+.app__count {
+  width: 100%;
+  text-align: end;
+  margin-bottom: 1rem;
+}
+
 @media screen and (min-width: 1024px) {
   .app {
     width: 40%;

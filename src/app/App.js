@@ -69,6 +69,7 @@ export default class App extends Component {
           )}
           <h2>Список пользователей:</h2>
           <progress className="app__progress" value={this.state.offset} max={this.state.progressMax}></progress>
+          <span className="app__count">Количество: {this.state.users.length}</span>
           <List users={this.state.users} onUserDelete={this.deleteUser} />
         </div>
       )
