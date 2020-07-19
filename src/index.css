@@ -69,15 +69,15 @@ a:active {
 
 .app__list li {
   display: flex;
-  height: 3rem;
   align-items: center;
   justify-content: flex-end;
   font-size: 1.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
 }
 
 .app__list li a {
-  margin: 0 0.4rem;
-  padding: 0.2rem;
+  margin-left: 0.6rem;
   font-weight: 600;
 }
 
