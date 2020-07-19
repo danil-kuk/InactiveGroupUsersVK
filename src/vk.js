@@ -59,19 +59,6 @@ export async function getUsersInGroup(groupId, offset) {
   return result
 }
 
-export async function deleteUserFromGroup(groupId, userId) {
-  const options = {
-    v: apiVersion,
-    access_token: token,
-    group_id: groupId,
-    user_id: userId
-  }
-  const result = await callAPI('groups.removeUser', options)
-  if (result) {
-    return result
-  }
-}
-
 async function callAPI(method, options) {
   const querry = new URLSearchParams(options)
   const request = `https://api.vk.com/method/${method}?${querry}`

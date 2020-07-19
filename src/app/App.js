@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import * as vk from '../vk'
 import List from './List'
-
-function timer(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
+import { timer } from './helpers'
 
 export default class App extends Component {
   state = {
@@ -18,7 +15,7 @@ export default class App extends Component {
 
   componentDidMount() {
     vk.getUserToken()
-    setTimeout(this.getUserGroups, vk.CALL_INTERVAL)
+    setTimeout(this.getUserGroups, 1000)
   }
 
   startSearch = async() => {
@@ -48,15 +45,6 @@ export default class App extends Component {
     this.setState({
       isSearching: false
     })
-  };
-
-  deleteUser = async(userId) => {
-    const response = await vk.deleteUserFromGroup(this.state.groupId, userId)
-    if (response) {
-      this.setState({
-        users: this.state.users.filter((user) => user.id !== userId)
-      })
-    }
   };
 
   getUserGroups = () => {
@@ -103,7 +91,7 @@ export default class App extends Component {
         <h2>Список пользователей:</h2>
         <progress className="app__progress" value={this.state.offset} max={this.state.progressMax}></progress>
         <span className="app__count">Количество: {this.state.users.length}</span>
-        <List users={this.state.users} onUserDelete={this.deleteUser} />
+        <List users={this.state.users} />
       </div>
     )
   }
