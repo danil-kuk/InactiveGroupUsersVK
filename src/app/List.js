@@ -20,9 +20,9 @@ export default class List extends Component {
       <ul className="app__list">
         {this.props.users.map((user) => (
           <li key={user.id}>
-            <span onClick={this.selectUserName}>{this.getUserName(user)}</span>
+            <span onClick={this.selectUserName}>{this.getUserLink(user)}</span>
             <a href={this.getUserLink(user)} target="_blank">
-              (id{user.id})
+              ({this.getUserName(user)})
             </a>
           </li>
         ))}
