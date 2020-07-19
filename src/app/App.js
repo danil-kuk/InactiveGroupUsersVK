@@ -18,9 +18,13 @@ export default class App extends Component {
 
   componentDidMount() {
     vk.getUserToken()
+    setTimeout(this.getUserGroups, vk.CALL_INTERVAL)
   }
 
   startSearch = async() => {
+    if (!this.state.groupId) {
+      return
+    }
     while (this.state.offset < this.state.progressMax) {
       const users = await vk.getUsersInGroup(this.state.groupId, this.state.offset)
       const deactivatedUsers = users.items.filter((user) => user.deactivated)
