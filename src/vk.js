@@ -3,35 +3,39 @@ import bridge from '@vkontakte/vk-bridge'
 
 export const USERS_PER_CALL = 1000
 export const CALL_INTERVAL = 3000
-export let accessToken = null
 const apiVersion = '5.120'
-const token = '1c45aa361c45aa361c45aa36481c36bcec11c451c45aa364357795fab0c50dad61cbef9'
-const helperAppId = 7542689
 const urlParams = new URLSearchParams(window.location.search)
-export const initGroupId = parseInt(urlParams.get('vk_group_id'))
+const token = urlParams.get('access_token')
+const userId = urlParams.get('viewer_id')
 
 // Логирует все события нативного клиента в консоль
 bridge.subscribe(handleBridgeEvent)
 
 function handleBridgeEvent(event) {
   console.log(event)
-  const eventType = event.detail.type
-  if (eventType == 'VKWebAppGetCommunityTokenResult') {
-    accessToken = event.detail.data.access_token
-  }
 }
 
 // Отправляет событие нативному клиенту
 bridge
   .send('VKWebAppInit', {})
   .then(() => {
-    if (initGroupId) {
-      console.log('Init group id:', initGroupId)
-    }
+    console.log('App started')
   })
   .catch((ex) => {
     console.error(ex)
   })
+
+export async function getUserAdminGroups() {
+  const options = {
+    v: apiVersion,
+    access_token: token,
+    user_id: userId,
+    extended: 1,
+    filter: 'admin'
+  }
+  const result = await callAPI('groups.get', options)
+  return result
+}
 
 export async function getUsersInGroup(groupId, offset) {
   const options = {
@@ -46,7 +50,7 @@ export async function getUsersInGroup(groupId, offset) {
   return result
 }
 
-export async function deleteUserFromGroup(groupId, userId, token) {
+export async function deleteUserFromGroup(groupId, userId) {
   const options = {
     v: apiVersion,
     access_token: token,
@@ -57,19 +61,6 @@ export async function deleteUserFromGroup(groupId, userId, token) {
   if (result) {
     return result
   }
-}
-
-export async function getAppAccessToken() {
-  const options = {
-    v: apiVersion,
-    client_id: helperAppId,
-    redirect_uri: 'https://oauth.vk.com/blank.html',
-    scope: 'groups',
-    response_type: 'token'
-  }
-  const querry = new URLSearchParams(options)
-  const request = `https://oauth.vk.com/authorize?${querry}`
-  window.open(request)
 }
 
 async function callAPI(method, options) {

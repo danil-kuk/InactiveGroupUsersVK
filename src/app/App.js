@@ -13,12 +13,14 @@ export default class App extends Component {
     progressMax: 1,
     offset: 0,
     isSearching: false,
-    accessToken: null
+    userGroups: []
   };
 
   componentDidMount() {
-    this.setState({
-      groupId: vk.initGroupId
+    vk.getUserAdminGroups().then(result => {
+      this.setState({
+        userGroups: result.items
+      })
     })
   }
 
@@ -48,19 +50,8 @@ export default class App extends Component {
     })
   };
 
-  redirectToVKAuth = () => {
-    vk.getAppAccessToken()
-  };
-
-  setAccessToken = (event) => {
-    const token = event.target.value
-    this.setState({
-      accessToken: token.trim()
-    })
-  };
-
   deleteUser = async(userId) => {
-    const response = await vk.deleteUserFromGroup(this.state.groupId, userId, this.state.accessToken)
+    const response = await vk.deleteUserFromGroup(this.state.groupId, userId)
     if (response) {
       this.setState({
         users: this.state.users.filter((user) => user.id !== userId)
@@ -68,38 +59,39 @@ export default class App extends Component {
     }
   };
 
+  setGroupIdAndResetState = (event) => {
+    const value = event.target.value
+    this.setState({
+      groupId: value,
+      users: [],
+      progressMax: 1,
+      offset: 0,
+      isSearching: false
+    })
+  }
+
   render() {
-    if (this.state.groupId) {
-      return (
-        <div className="app">
-          {this.state.isSearching ? (
-            <button className="app__start-button" onClick={this.pauseSearch}>
-              Приостановить поиск
-            </button>
-          ) : (
-            <button className="app__start-button" onClick={this.startSearch}>
-              Начать поиск
-            </button>
-          )}
-          <div className="app__token">
-            <label>
-              <span>
-                Введите <a onClick={this.redirectToVKAuth}>ключ</a>:{' '}
-              </span>
-              <input type="text" onChange={this.setAccessToken}></input>
-            </label>
-          </div>
-          <h2>Список пользователей:</h2>
-          <progress className="app__progress" value={this.state.offset} max={this.state.progressMax}></progress>
-          <span className="app__count">Количество: {this.state.users.length}</span>
-          <List users={this.state.users} onUserDelete={this.deleteUser} showDeleteButton={this.state.accessToken} />
-        </div>
-      )
-    }
     return (
       <div className="app">
-        <h2>Ошибка!</h2>
-        <p>Запустите приложение в группе ВКонтакте</p>
+        <select onChange={this.setGroupIdAndResetState}>
+          <option value="0">Выберите группу...</option>
+          {this.state.userGroups.map(group => (
+            <option key={group.id} value={group.id}>{group.name}</option>
+          ))}
+        </select>
+        {this.state.isSearching ? (
+          <button className="app__start-button" onClick={this.pauseSearch}>
+              Приостановить поиск
+          </button>
+        ) : (
+          <button className="app__start-button" onClick={this.startSearch}>
+              Начать поиск
+          </button>
+        )}
+        <h2>Список пользователей:</h2>
+        <progress className="app__progress" value={this.state.offset} max={this.state.progressMax}></progress>
+        <span className="app__count">Количество: {this.state.users.length}</span>
+        <List users={this.state.users} onUserDelete={this.deleteUser} />
       </div>
     )
   }
