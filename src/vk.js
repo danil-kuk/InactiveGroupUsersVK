@@ -5,14 +5,19 @@ export const USERS_PER_CALL = 1000
 export const CALL_INTERVAL = 3000
 const apiVersion = '5.120'
 const urlParams = new URLSearchParams(window.location.search)
-const token = urlParams.get('access_token')
-const userId = urlParams.get('viewer_id')
+const userId = parseInt(urlParams.get('vk_user_id'))
+const appId = parseInt(urlParams.get('vk_app_id'))
+export let token = ''
 
 // Логирует все события нативного клиента в консоль
 bridge.subscribe(handleBridgeEvent)
 
 function handleBridgeEvent(event) {
   console.log(event)
+  const eventType = event.detail.type
+  if (eventType == 'VKWebAppAccessTokenReceived') {
+    token = event.detail.data.access_token
+  }
 }
 
 // Отправляет событие нативному клиенту
@@ -35,6 +40,10 @@ export async function getUserAdminGroups() {
   }
   const result = await callAPI('groups.get', options)
   return result
+}
+
+export async function getUserToken() {
+  await bridge.send('VKWebAppGetAuthToken', { app_id: appId, scope: 'groups' })
 }
 
 export async function getUsersInGroup(groupId, offset) {

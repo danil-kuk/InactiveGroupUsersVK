@@ -17,11 +17,7 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    vk.getUserAdminGroups().then(result => {
-      this.setState({
-        userGroups: result.items
-      })
-    })
+    vk.getUserToken()
   }
 
   startSearch = async() => {
@@ -59,6 +55,16 @@ export default class App extends Component {
     }
   };
 
+  getUserGroups = () => {
+    if (vk.token && this.state.userGroups.length == 0) {
+      vk.getUserAdminGroups().then((result) => {
+        this.setState({
+          userGroups: result.items
+        })
+      })
+    }
+  };
+
   setGroupIdAndResetState = (event) => {
     const value = event.target.value
     this.setState({
@@ -68,24 +74,26 @@ export default class App extends Component {
       offset: 0,
       isSearching: false
     })
-  }
+  };
 
   render() {
     return (
       <div className="app">
-        <select onChange={this.setGroupIdAndResetState}>
+        <select onChange={this.setGroupIdAndResetState} onClick={this.getUserGroups}>
           <option value="0">Выберите группу...</option>
-          {this.state.userGroups.map(group => (
-            <option key={group.id} value={group.id}>{group.name}</option>
+          {this.state.userGroups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.name}
+            </option>
           ))}
         </select>
         {this.state.isSearching ? (
           <button className="app__start-button" onClick={this.pauseSearch}>
-              Приостановить поиск
+            Приостановить поиск
           </button>
         ) : (
           <button className="app__start-button" onClick={this.startSearch}>
-              Начать поиск
+            Начать поиск
           </button>
         )}
         <h2>Список пользователей:</h2>

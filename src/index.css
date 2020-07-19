@@ -47,6 +47,7 @@ a:active {
 
 .app select {
   margin: 1rem 0;
+  width: 60%;
 }
 
 .app__start-button {
