@@ -13,6 +13,7 @@ export default class List extends Component {
   selectUserName = async(event) => {
     const span = event.target
     copyToClipboard(span, 0, 1)
+    span.classList.toggle('selected')
   }
 
   render() {
